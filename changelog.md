@@ -22,6 +22,31 @@ All notable changes to the Sample Browser project will be documented in this fil
 - Batch ZIP button placement
 - Various UI consistency issues
 
+### Tech Stack
+- **Frontend**:
+  - Electron (v28.0.0+) for cross-platform desktop application
+  - Custom Web Audio API implementation for audio processing
+  - Canvas API for waveform visualization
+  - CSS Grid/Flexbox for responsive layouts
+  
+- **Backend**:
+  - Node.js (v18.0.0+) for system operations
+  - Native file system operations via Electron IPC
+  - JSZip/AdmZip for archive handling
+  
+- **Audio Processing**:
+  - Web Audio API for real-time audio manipulation
+  - Custom waveform rendering engine
+  - Sample-accurate playback engine
+  - Real-time audio analysis and visualization
+  
+- **Development**:
+  - TypeScript for type safety
+  - Webpack for bundling
+  - ESLint for code quality
+  - Jest for testing
+  - Electron Builder for distribution
+
 ## [0.2.3] - 2024-XX-XX
 ### Added
 - Successful subfolder export functionality

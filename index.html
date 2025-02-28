@@ -62,11 +62,14 @@
       font-family: var(--font-family);
       font-size: 13px;
       padding: 4px 8px;
+      padding-right: 36px;
       cursor: pointer;
       border-radius: 4px;
       display: flex;
       align-items: center;
       gap: 6px;
+      position: relative;
+      overflow: hidden;
     }
 
     .pack-tree-item:hover {
@@ -83,6 +86,15 @@
 
     .pack-tree-item.file {
       color: #9cdcfe;
+    }
+
+    .item-name,
+    .folder-name {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 0;
     }
 
     .content {
@@ -237,24 +249,56 @@
 
     :root[data-theme="dark"][data-skin="retro"] {
       --bg-primary: #000000;
-      --bg-secondary: #001100;
-      --bg-tertiary: #002200;
-      --text-primary: #00ff00;
-      --text-shadow: 0 0 5px rgba(0, 255, 0, 0.7);
-      --border-color: #00ff00;
-      --glow-color: rgba(0, 255, 0, 0.5);
-      --scanline-color: rgba(0, 0, 0, 0.15);
+      --bg-secondary: #1a1a1a;
+      --bg-tertiary: #262626;
+      --text-primary: #33ff33;
+      --text-secondary: #00cc00;
+      --border-color: #33ff33;
+      --accent-color: #00ff00;
+      --accent-hover: #33ff33;
+      --accent-muted: rgba(51, 255, 51, 0.1);
+      --waveform-color: #00ff00;
+      --waveform-bg: #0a0a0a;
+      --waveform-progress: rgba(0, 255, 0, 0.2);
+      --button-bg: #000000;
+      --button-hover: #1a1a1a;
+      --selection-color: rgba(0, 255, 0, 0.2);
+      --shadow-color: rgba(0, 255, 0, 0.2);
+      --text-shadow: 0 0 8px rgba(51, 255, 51, 0.5);
+      --glow-color: rgba(51, 255, 51, 0.2);
+      --scanline-color: rgba(51, 255, 51, 0.03);
+      --focus-ring: 0 0 0 2px rgba(51, 255, 51, 0.3);
+      --toolbar-height: 48px;
+      --status-height: 28px;
+      --transition-speed: 0.2s;
+      font-family: "VT323", monospace;
     }
 
     :root[data-theme="light"][data-skin="retro"] {
-      --bg-primary: #98ff98;
-      --bg-secondary: #90ee90;
-      --bg-tertiary: #88ea88;
-      --text-primary: #004400;
-      --text-shadow: 0 0 5px rgba(0, 68, 0, 0.7);
-      --border-color: #004400;
-      --glow-color: rgba(0, 68, 0, 0.5);
-      --scanline-color: rgba(255, 255, 255, 0.15);
+      --bg-primary: #e8e8e8;
+      --bg-secondary: #d4d4d4;
+      --bg-tertiary: #c0c0c0;
+      --text-primary: #000080;
+      --text-secondary: #000066;
+      --border-color: #808080;
+      --accent-color: #000080;
+      --accent-hover: #0000a0;
+      --accent-muted: rgba(0, 0, 128, 0.1);
+      --waveform-color: #000080;
+      --waveform-bg: #ffffff;
+      --waveform-progress: rgba(0, 0, 128, 0.2);
+      --button-bg: #d4d4d4;
+      --button-hover: #c0c0c0;
+      --selection-color: rgba(0, 0, 128, 0.1);
+      --shadow-color: rgba(0, 0, 0, 0.2);
+      --text-shadow: none;
+      --glow-color: rgba(0, 0, 128, 0.1);
+      --scanline-color: transparent;
+      --focus-ring: 0 0 0 2px rgba(0, 0, 128, 0.2);
+      --toolbar-height: 48px;
+      --status-height: 28px;
+      --transition-speed: 0.2s;
+      font-family: "VT323", monospace;
     }
 
     /* Modern skin variables */
@@ -267,14 +311,20 @@
       --border-color: #2d2635;
       --accent-color: #8a67bd;
       --accent-hover: #9b78ce;
+      --accent-muted: rgba(138, 103, 189, 0.1);
       --waveform-color: #e9a6ff;
       --waveform-bg: #1a1621;
+      --waveform-progress: rgba(138, 103, 189, 0.3);
       --button-bg: #2a2432;
       --button-hover: #332b3b;
       --selection-color: rgba(138, 103, 189, 0.2);
       --shadow-color: rgba(0, 0, 0, 0.2);
       --text-shadow: none;
       --glow-color: rgba(138, 103, 189, 0.1);
+      --focus-ring: 0 0 0 2px var(--accent-muted);
+      --toolbar-height: 48px;
+      --status-height: 28px;
+      --transition-speed: 0.2s;
     }
 
     :root[data-theme="light"][data-skin="modern"] {
@@ -286,14 +336,20 @@
       --border-color: #e0e0e4;
       --accent-color: #8a67bd;
       --accent-hover: #7857a6;
+      --accent-muted: rgba(138, 103, 189, 0.1);
       --waveform-color: #8a67bd;
       --waveform-bg: #f5f5f7;
+      --waveform-progress: rgba(138, 103, 189, 0.2);
       --button-bg: #f0f0f2;
       --button-hover: #e6e6e8;
       --selection-color: rgba(138, 103, 189, 0.1);
       --shadow-color: rgba(0, 0, 0, 0.1);
       --text-shadow: none;
       --glow-color: rgba(138, 103, 189, 0.05);
+      --focus-ring: 0 0 0 2px var(--accent-muted);
+      --toolbar-height: 48px;
+      --status-height: 28px;
+      --transition-speed: 0.2s;
     }
 
     /* Modern skin overrides */
@@ -311,11 +367,14 @@
     }
 
     [data-skin="modern"] .toolbar {
-      height: 48px;
+      height: var(--toolbar-height);
       background: var(--bg-secondary);
       border-bottom: 1px solid var(--border-color);
       padding: 0 16px;
       gap: 8px;
+      display: flex;
+      align-items: center;
+      transition: background-color var(--transition-speed) ease;
     }
 
     [data-skin="modern"] .btn {
@@ -327,47 +386,40 @@
       font-size: 13px;
       font-weight: 500;
       text-transform: none;
-      transition: all 0.2s ease;
+      transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
       margin-right: 4px;
       height: 32px;
       display: inline-flex;
       align-items: center;
-      font-family: 'Inter', sans-serif;
+      gap: 6px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 1px 2px var(--shadow-color);
+    }
+
+    [data-skin="modern"] .btn::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--accent-color);
+      opacity: 0;
+      transition: opacity var(--transition-speed) ease;
     }
 
     [data-skin="modern"] .btn:hover {
       background: var(--button-hover);
       border-color: var(--accent-color);
       color: var(--accent-color);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px var(--shadow-color);
+    }
+
+    [data-skin="modern"] .btn:active {
+      transform: translateY(0);
       box-shadow: 0 2px 4px var(--shadow-color);
-    }
-
-    [data-skin="modern"] .btn.active {
-      background: var(--accent-color);
-      color: white;
-      border-color: var(--accent-color);
-    }
-
-    [data-skin="modern"] .explorer-panel {
-      background: var(--bg-secondary);
-      border-right: 1px solid var(--border-color);
-      width: 280px;
-    }
-
-    [data-skin="modern"] .waveform-area {
-      background: var(--waveform-bg);
-      border-bottom: 1px solid var(--border-color);
-      height: 180px;
-    }
-
-    [data-skin="modern"] .waveform-container {
-      border: none;
-      background: transparent;
-      border-radius: 0;
-    }
-
-    [data-skin="modern"] wave {
-      background: var(--waveform-bg) !important;
     }
 
     [data-skin="modern"] .volume-control {
@@ -375,8 +427,14 @@
       align-items: center;
       background: var(--button-bg);
       border-radius: 6px;
-      padding: 4px 8px;
+      padding: 4px 12px;
       border: 1px solid var(--border-color);
+      transition: all var(--transition-speed) ease;
+    }
+
+    [data-skin="modern"] .volume-control:hover {
+      border-color: var(--accent-color);
+      box-shadow: 0 2px 4px var(--shadow-color);
     }
 
     [data-skin="modern"] .volume-slider {
@@ -385,6 +443,7 @@
       border-radius: 2px;
       background: var(--border-color);
       border: none;
+      transition: all var(--transition-speed) ease;
     }
 
     [data-skin="modern"] .volume-slider::-webkit-slider-thumb {
@@ -394,137 +453,139 @@
       background: var(--accent-color);
       border: none;
       box-shadow: 0 1px 3px var(--shadow-color);
+      transition: all var(--transition-speed) ease;
+    }
+
+    [data-skin="modern"] .volume-slider:hover::-webkit-slider-thumb {
+      transform: scale(1.2);
+      box-shadow: 0 2px 6px var(--shadow-color);
     }
 
     [data-skin="modern"] .volume-label {
       color: var(--text-secondary);
       font-weight: 500;
       font-size: 12px;
+      margin-right: 8px;
     }
 
-    [data-skin="modern"] table {
-      border-spacing: 0;
-      width: 100%;
-    }
-
-    [data-skin="modern"] th {
-      background: var(--bg-tertiary);
-      color: var(--text-secondary);
-      font-weight: 600;
-      font-size: 12px;
-      padding: 8px 16px;
-      border-bottom: 1px solid var(--border-color);
-      text-transform: none;
-    }
-
-    [data-skin="modern"] td {
-      padding: 8px 16px;
-      border-bottom: 1px solid var(--border-color);
-      color: var(--text-primary);
-      font-size: 13px;
-    }
-
-    [data-skin="modern"] tr:hover {
-      background: var(--selection-color);
-    }
-
-    [data-skin="modern"] tr.selected {
-      background: var(--selection-color);
-    }
-
-    [data-skin="modern"] .pack-panel {
-      background: var(--bg-secondary);
-      border-left: 1px solid var(--border-color);
-      width: 320px;
-    }
-
-    [data-skin="modern"] .pack-header {
-      padding: 16px;
-      background: var(--bg-tertiary);
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    [data-skin="modern"] .pack-title {
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-bottom: 12px;
-    }
-
-    [data-skin="modern"] .drop-zone {
-      border: 2px dashed var(--border-color);
+    [data-skin="modern"] .waveform-container {
+      background: var(--waveform-bg);
+      border: none;
       border-radius: 8px;
-      background: var(--bg-tertiary);
-      padding: 24px;
       margin: 16px;
-      color: var(--text-secondary);
-      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px var(--shadow-color);
+      transition: all var(--transition-speed) ease;
     }
 
-    [data-skin="modern"] .drop-zone.drag-over {
-      border-color: var(--accent-color);
-      background: var(--selection-color);
+    [data-skin="modern"] .waveform-container:hover {
       box-shadow: 0 4px 12px var(--shadow-color);
     }
 
-    [data-skin="modern"] ::-webkit-scrollbar {
-      width: 12px;
-      background: transparent;
-    }
-
-    [data-skin="modern"] ::-webkit-scrollbar-track {
-      background: var(--bg-secondary);
-      border: none;
-    }
-
-    [data-skin="modern"] ::-webkit-scrollbar-thumb {
-      background: var(--button-bg);
-      border: 3px solid var(--bg-secondary);
+    [data-skin="modern"] wave {
       border-radius: 6px;
+      overflow: hidden;
     }
 
-    [data-skin="modern"] ::-webkit-scrollbar-thumb:hover {
-      background: var(--button-hover);
-    }
-
-    [data-skin="modern"] .settings-panel {
-      background: var(--bg-secondary);
-      border-radius: 12px;
-      box-shadow: 0 8px 24px var(--shadow-color);
-      border: 1px solid var(--border-color);
-    }
-
-    [data-skin="modern"] .settings-select {
-      background: var(--button-bg);
-      border: 1px solid var(--border-color);
+    [data-skin="modern"] .progress-bar {
+      background: var(--waveform-progress);
       border-radius: 6px;
-      padding: 8px 12px;
-      color: var(--text-primary);
-      font-family: 'Inter', sans-serif;
-      font-size: 13px;
-    }
-
-    [data-skin="modern"] .settings-label {
-      font-weight: 500;
-      color: var(--text-secondary);
-      margin-bottom: 8px;
-    }
-
-    [data-skin="modern"] .explorer-header {
-      padding: 16px;
-      font-weight: 600;
-      color: var(--text-secondary);
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
     }
 
     [data-skin="modern"] .status-bar {
+      height: var(--status-height);
       background: var(--bg-secondary);
       border-top: 1px solid var(--border-color);
       color: var(--text-secondary);
       font-size: 12px;
-      padding: 8px 16px;
-      height: 32px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      transition: background-color var(--transition-speed) ease;
+    }
+
+    [data-skin="modern"] .pack-tree-item {
+      padding: 6px 12px;
+      padding-right: 36px;
+      border-radius: 4px;
+      margin: 2px 0;
+      transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    [data-skin="modern"] .item-name,
+    [data-skin="modern"] .folder-name {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 0;
+    }
+
+    [data-skin="modern"] .remove-item {
+      opacity: 0;
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%) scale(0.8);
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: var(--button-bg);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-color);
+      cursor: pointer;
+      font-size: 14px;
+      transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 2;
+    }
+
+    [data-skin="modern"] .pack-tree-item:hover {
+      background: var(--button-hover);
+      transform: translateX(4px);
+      box-shadow: 0 2px 4px var(--shadow-color);
+    }
+
+    [data-skin="modern"] .pack-tree-item:active {
+      transform: translateX(2px);
+      box-shadow: 0 1px 2px var(--shadow-color);
+    }
+
+    [data-skin="modern"] .pack-tree-item.selected {
+      background: var(--accent-muted);
+      color: var(--accent-color);
+    }
+
+    [data-skin="modern"] .pack-tree-item.folder {
+      font-weight: 500;
+    }
+
+    [data-skin="modern"] .pack-tree-item.file {
+      color: var(--text-secondary);
+    }
+
+    [data-skin="modern"] .pack-tree-item.file:hover {
+      color: var(--accent-color);
+    }
+
+    [data-skin="modern"] .pack-tree-item:hover .remove-item {
+      opacity: 1;
+      transform: translateY(-50%) scale(1);
+    }
+
+    [data-skin="modern"] .remove-item:hover {
+      background: var(--accent-color);
+      color: white;
+      border-color: var(--accent-color);
+      transform: translateY(-50%) scale(1.1);
+      box-shadow: 0 2px 4px var(--shadow-color);
     }
 
     /* Hide CRT effects for modern skin */
@@ -656,17 +717,20 @@
       display: flex;
       flex-direction: column;
       height: 100vh;
-      border: 2px solid #00ff00;
-      box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+      min-width: 800px; /* Prevent container from becoming too narrow */
     }
     
     .toolbar {
-      height: 40px;
-      background-color: #001100;
-      border-bottom: 1px solid #00ff00;
+      height: var(--toolbar-height);
+      background-color: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
       display: flex;
       align-items: center;
-      padding: 0 10px;
+      padding: 0 16px;
+      gap: 8px;
+      flex-wrap: wrap; /* Allow buttons to wrap on narrow screens */
+      min-height: var(--toolbar-height); /* Ensure minimum height even when wrapped */
+      overflow-x: auto; /* Add horizontal scroll if needed */
     }
     
     .main-content {
@@ -714,59 +778,56 @@
     
     /* Buttons */
     .btn {
-      background-color: #002200;
-      color: #00ff00;
-      border: 1px solid #00ff00;
-      border-radius: 0;
-      padding: 5px 10px;
-      margin-right: 10px;
-      font-size: 14px;
+      background-color: var(--button-bg);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      padding: 6px 12px;
+      font-size: 13px;
       cursor: pointer;
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      font-family: 'VT323', monospace;
-      text-transform: uppercase;
+      white-space: nowrap; /* Prevent button text from wrapping */
+      min-width: fit-content; /* Ensure buttons don't shrink below content width */
+      flex-shrink: 0; /* Prevent buttons from shrinking */
     }
     
     .btn:hover {
-      background-color: #003300;
+      background-color: var(--button-hover);
       box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
     }
     
     .btn:active {
-      background-color: #004400;
+      background-color: var(--button-hover);
     }
     
     .toggle-btn {
-      background-color: #001100;
-      color: #00ff00;
+      background-color: var(--button-bg);
+      color: var(--text-primary);
     }
     
     .toggle-btn.active {
-      background-color: #003300;
-      color: #00ff00;
+      background-color: var(--button-hover);
     }
     
     /* Volume control */
     .volume-control {
       display: flex;
       align-items: center;
-      margin-right: 15px;
+      gap: 8px;
+      flex-shrink: 1; /* Allow volume control to shrink if needed */
+      min-width: 120px; /* Minimum width for volume control */
     }
     
     .volume-label {
-      color: #00ff00;
+      color: var(--text-primary);
       font-size: 14px;
       margin-right: 5px;
     }
     
     .volume-slider {
-      width: 80px;
-      height: 4px;
-      -webkit-appearance: none;
-      background: #001100;
-      border: 1px solid #00ff00;
-      outline: none;
+      width: 80px; /* Fixed width for slider */
+      flex-shrink: 0;
     }
     
     .volume-slider::-webkit-slider-thumb {
@@ -1113,15 +1174,18 @@
       padding: 16px;
       background: var(--bg-tertiary);
       border-bottom: 1px solid var(--border-color);
-      align-items: center;
     }
 
     [data-skin="modern"] .pack-controls .btn {
       flex: 1;
-      min-width: calc(50% - 4px);
+      min-width: calc(33.33% - 8px);
       margin: 0;
       justify-content: center;
       height: 36px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 6px 12px;
     }
 
     [data-skin="modern"] .pack-controls #packStats {
@@ -1145,23 +1209,375 @@
       overflow-y: auto;
       padding: 8px;
     }
+
+    /* Retro skin overrides */
+    [data-skin="retro"] {
+      font-family: var(--font-family);
+      font-size: 14px;
+      letter-spacing: 0.5px;
+    }
+
+    [data-skin="retro"] .app-container {
+      animation: crt-flicker 0.15s infinite;
+      border: 2px solid var(--border-color);
+      box-shadow: 0 0 20px var(--glow-color);
+      background: var(--bg-primary);
+      position: relative;
+      overflow: hidden;
+    }
+
+    [data-skin="retro"] .app-container::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        var(--scanline-color) 0px,
+        var(--scanline-color) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+      pointer-events: none;
+      animation: scanline 10s linear infinite;
+      opacity: 0.5;
+    }
+
+    [data-skin="retro"] .toolbar {
+      height: var(--toolbar-height);
+      background: var(--bg-secondary);
+      border-bottom: 2px solid var(--border-color);
+      padding: 0 16px;
+      gap: 8px;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+
+    [data-skin="retro"] .btn {
+      background: var(--button-bg);
+      color: var(--text-primary);
+      border: 2px solid var(--border-color);
+      padding: 6px 12px;
+      font-size: 14px;
+      font-weight: bold;
+      text-transform: uppercase;
+      transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+      margin-right: 4px;
+      height: 32px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-shadow: var(--text-shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    [data-skin="retro"] .btn::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        45deg,
+        transparent,
+        var(--glow-color),
+        transparent
+      );
+      opacity: 0;
+      transition: opacity var(--transition-speed) ease;
+      pointer-events: none;
+    }
+
+    [data-skin="retro"] .btn:hover {
+      background: var(--button-hover);
+      border-color: var(--accent-color);
+      color: var(--accent-color);
+      box-shadow: 0 0 15px var(--glow-color);
+      text-shadow: 0 0 8px var(--accent-color);
+    }
+
+    [data-skin="retro"] .btn:hover::after {
+      opacity: 0.5;
+      animation: glowSweep 2s linear infinite;
+    }
+
+    [data-skin="retro"] .pack-tree-item {
+      padding: 6px 12px;
+      padding-right: 36px;
+      margin: 2px 0;
+      transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-secondary);
+      text-shadow: var(--text-shadow);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+
+    [data-skin="retro"] .pack-tree-item:hover {
+      background: var(--button-hover);
+      color: var(--accent-color);
+      text-shadow: 0 0 8px var(--accent-color);
+      border-color: var(--accent-color);
+      box-shadow: inset 0 0 10px var(--glow-color);
+    }
+
+    [data-skin="retro"] .remove-item {
+      opacity: 0;
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%) scale(0.8);
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--button-bg);
+      color: var(--text-primary);
+      border: 2px solid var(--border-color);
+      cursor: pointer;
+      font-size: 14px;
+      transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+      text-shadow: var(--text-shadow);
+      z-index: 2;
+    }
+
+    [data-skin="retro"] .pack-tree-item:hover .remove-item {
+      opacity: 1;
+      transform: translateY(-50%) scale(1);
+    }
+
+    [data-skin="retro"] .remove-item:hover {
+      background: var(--accent-color);
+      color: var(--bg-primary);
+      border-color: var(--accent-color);
+      box-shadow: 0 0 10px var(--glow-color);
+      text-shadow: none;
+    }
+
+    @keyframes glowSweep {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes crt-flicker {
+      0% { opacity: 1.0; }
+      50% { opacity: 0.995; }
+      100% { opacity: 1.0; }
+    }
+
+    @keyframes scanline {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(100%); }
+    }
+
+    /* Shared tooltip styles */
+    [data-tooltip] {
+      position: relative;
+    }
+
+    [data-tooltip]::before {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-8px) scale(0.8);
+      padding: 4px 8px;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      font-size: 12px;
+      white-space: nowrap;
+      border-radius: 4px;
+      border: 1px solid var(--border-color);
+      opacity: 0;
+      pointer-events: none;
+      transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 1000;
+    }
+
+    [data-tooltip]:hover::before {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-4px) scale(1);
+    }
+
+    [data-skin="retro"] [data-tooltip]::before {
+      border: 2px solid var(--border-color);
+      text-shadow: var(--text-shadow);
+      box-shadow: 0 0 10px var(--glow-color);
+    }
+
+    /* Add subtle animation for modern skin */
+    @keyframes subtlePulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+      100% { transform: scale(1); }
+    }
+
+    [data-skin="modern"] .pack-tree-item:hover {
+      animation: subtlePulse 1s ease-in-out infinite;
+    }
+
+    /* Add scanline effect for retro skin */
+    [data-skin="retro"] .pack-tree-item::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--accent-color);
+      opacity: 0;
+      transition: opacity var(--transition-speed) ease;
+    }
+
+    [data-skin="retro"] .pack-tree-item:hover::after {
+      opacity: 0.2;
+      animation: scanline 2s linear infinite;
+    }
+
+    [data-skin="retro"] .pack-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 16px;
+      background: var(--bg-secondary);
+      border-bottom: 2px solid var(--border-color);
+    }
+
+    [data-skin="retro"] .pack-controls .btn {
+      flex: 1;
+      min-width: calc(33.33% - 8px);
+      margin: 0;
+      justify-content: center;
+      height: 36px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 6px 12px;
+    }
+
+    [data-skin="retro"] .pack-controls #packStats {
+      width: 100%;
+      text-align: right;
+      padding-top: 8px;
+      border-top: 2px solid var(--border-color);
+      margin-top: 8px;
+      color: var(--text-primary);
+    }
+
+    [data-skin="modern"] .pack-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 16px;
+      background: var(--bg-tertiary);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    [data-skin="modern"] .pack-controls .btn {
+      flex: 1;
+      min-width: calc(33.33% - 8px);
+      margin: 0;
+      justify-content: center;
+      height: 36px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 6px 12px;
+    }
+
+    [data-skin="modern"] .pack-controls #packStats {
+      width: 100%;
+      text-align: right;
+      padding-top: 8px;
+      border-top: 1px solid var(--border-color);
+      margin-top: 8px;
+      color: var(--text-secondary);
+    }
+
+    /* Button container to group related buttons */
+    .toolbar-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0; /* Prevent button group from shrinking */
+    }
+
+    .path-display {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 100px; /* Minimum width for path display */
+      margin: 0 8px;
+    }
+
+    /* Media queries for responsive adjustments */
+    @media (max-width: 1200px) {
+      .toolbar {
+        height: auto; /* Allow height to adjust based on content */
+        padding: 8px 16px;
+      }
+      
+      .volume-control {
+        order: -1; /* Move volume control to start on smaller screens */
+        width: 100%;
+        margin-bottom: 8px;
+      }
+      
+      .volume-slider {
+        width: 100%; /* Full width slider on smaller screens */
+        max-width: 200px;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .path-display {
+        width: 100%;
+        order: 1; /* Move path display to bottom on very small screens */
+        margin-top: 8px;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="app-container" data-skin="retro">
     <!-- Toolbar -->
     <div class="toolbar">
-      <button id="openFolderBtn" class="btn">Open Folder</button>
-      <button id="openZipBtn" class="btn">Open ZIP</button>
-      <button id="homeBtn" class="btn">Home</button>
-      <button id="playBtn" class="btn toggle-btn">Play</button>
-      <button id="loopBtn" class="btn toggle-btn active">Loop: On</button>
+      <div class="toolbar-group">
+        <button id="openFolderBtn" class="btn">Open Folder</button>
+        <button id="openZipBtn" class="btn">Open ZIP</button>
+        <button id="homeBtn" class="btn">Home</button>
+      </div>
+      
+      <div class="toolbar-group">
+        <button id="playBtn" class="btn toggle-btn">Play</button>
+        <button id="loopBtn" class="btn toggle-btn active">Loop: On</button>
+      </div>
+      
       <div class="volume-control">
         <label for="volumeSlider" class="volume-label">Volume:</label>
         <input type="range" id="volumeSlider" min="0" max="100" value="80" class="volume-slider">
       </div>
-      <button id="settingsBtn" class="btn">Settings</button>
-      <button class="theme-toggle btn">Mode: Dark</button>
+      
+      <div class="toolbar-group">
+        <button id="settingsBtn" class="btn">Settings</button>
+        <button class="theme-toggle btn">Mode: Dark</button>
+      </div>
+      
       <div id="pathDisplay" class="path-display">No folder or ZIP file selected</div>
     </div>
     
