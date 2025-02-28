@@ -142,8 +142,13 @@ function init() {
     autoPlay = savedAutoPlay === 'true';
   }
   
+  const savedLoop = localStorage.getItem('sampleBrowserLoop');
+  if (savedLoop !== null) {
+    isLooping = savedLoop === 'true';
+    updateLoopButton();
+  }
+  
   // Set initial state
-  updateLoopButton();
   updateStatusBar('Ready');
   
   // Add autoplay toggle button to toolbar
@@ -672,16 +677,19 @@ async function loadAudioFile(file) {
     const playPauseBtn = document.createElement('button');
     playPauseBtn.className = 'control-btn';
     playPauseBtn.textContent = 'Play';
+    playPauseBtn.setAttribute('data-tooltip', 'Play/Pause Audio');
     playPauseBtn.addEventListener('click', handlePlayToggle);
     
     const restartBtn = document.createElement('button');
     restartBtn.className = 'control-btn';
     restartBtn.textContent = 'Restart';
+    restartBtn.setAttribute('data-tooltip', 'Restart from Beginning');
     restartBtn.addEventListener('click', handleRestart);
     
     const loopToggleBtn = document.createElement('button');
     loopToggleBtn.className = 'control-btn';
     loopToggleBtn.textContent = isLooping ? 'Loop: On' : 'Loop: Off';
+    loopToggleBtn.setAttribute('data-tooltip', 'Toggle Loop Playback');
     loopToggleBtn.classList.toggle('active', isLooping);
     loopToggleBtn.addEventListener('click', handleLoopToggle);
     
@@ -824,7 +832,9 @@ async function loadAudioFile(file) {
     
     // Start playback if autoPlay is enabled
     if (autoPlay) {
-      handlePlayToggle();
+      isPlaying = true;
+      updatePlayButton();
+      startPlayback(0);
     }
     
     updateStatusBar(`Loaded: ${file.name}`);
@@ -998,19 +1008,58 @@ function updatePlaybackTime() {
 function handleRestart() {
   if (!audioBuffer) return;
   
-  if (isPlaying) {
-    handlePlayToggle(); // Stop current playback
+  // Stop current playback
+  if (audioSource) {
+    audioSource.stop();
+    audioSource = null;
   }
-  handlePlayToggle(); // Start from beginning
+  stopSeekbarUpdates();
+  
+  // Reset seek slider and progress bar
+  const seekSlider = waveformContainer.querySelector('.seek-slider');
+  if (seekSlider) {
+    seekSlider.value = 0;
+  }
+  
+  const progressBar = waveformContainer.querySelector('.progress-bar');
+  if (progressBar) {
+    progressBar.style.width = '0%';
+  }
+  
+  // Update time display
+  const timeInfo = waveformContainer.querySelector('.file-info span:last-child');
+  if (timeInfo) {
+    timeInfo.textContent = `00:00 / ${formatTime(audioBuffer.duration)}`;
+  }
+  
+  // Start playback from beginning
+  startPlayback(0);
+  isPlaying = true;
+  updatePlayButton();
 }
 
 // Handle loop toggle
 function handleLoopToggle() {
   isLooping = !isLooping;
+  
+  // Update audio source if it exists
   if (audioSource) {
     audioSource.loop = isLooping;
   }
-  updateLoopButton();
+  
+  // Update loop button in toolbar
+  loopBtn.textContent = isLooping ? 'Loop: On' : 'Loop: Off';
+  loopBtn.classList.toggle('active', isLooping);
+  
+  // Update loop button in waveform controls if it exists
+  const loopToggleBtn = waveformContainer.querySelector('.control-btn:last-child');
+  if (loopToggleBtn) {
+    loopToggleBtn.textContent = isLooping ? 'Loop: On' : 'Loop: Off';
+    loopToggleBtn.classList.toggle('active', isLooping);
+  }
+  
+  // Store loop preference
+  localStorage.setItem('sampleBrowserLoop', isLooping);
 }
 
 // Reset waveform
@@ -1641,21 +1690,33 @@ async function handleContextMenuAction(action) {
 
 // Rename a pack item
 function renamePackItem(oldPath, newName) {
+  // Extract the extension from the old path
+  const oldExtension = oldPath.split('.').pop();
+  
+  // If it's a folder, just use the new name as is
   if (currentPack.folders[oldPath]) {
     // Rename folder
     const newPath = oldPath.split('/').slice(0, -1).concat(newName).join('/');
     currentPack.folders[newPath] = currentPack.folders[oldPath];
     delete currentPack.folders[oldPath];
   } else {
-    // Rename file
+    // For files, ensure we preserve the extension
     const item = currentPack.items.find(i => i.path === oldPath);
     if (item) {
-      item.name = newName;
-      item.path = newName;
+      // If new name already has the correct extension, use it as is
+      if (newName.toLowerCase().endsWith('.' + oldExtension.toLowerCase())) {
+        item.name = newName;
+        item.path = newName;
+      } else {
+        // Otherwise, append the original extension
+        item.name = `${newName}.${oldExtension}`;
+        item.path = `${newName}.${oldExtension}`;
+      }
     }
   }
   
   updatePackTree();
+  updateStatusBar(`Renamed to ${newName}`);
 }
 
 // Delete a pack item
@@ -1685,6 +1746,7 @@ function updatePackTree() {
     currentPack.items.forEach(item => {
       html += `<li class="pack-tree-item pack-item ${item === selectedFile ? 'selected' : ''}" data-path="${item.path}">
         <span class="item-name">${item.name}</span>
+        <button class="remove-item" title="Remove from pack">×</button>
       </li>`;
     });
   }
@@ -1699,6 +1761,7 @@ function updatePackTree() {
     items.forEach(item => {
       html += `<li class="pack-tree-item pack-item ${item === selectedFile ? 'selected' : ''}" data-path="${item.path}" data-folder="${folderPath}">
         <span class="item-name">${item.name}</span>
+        <button class="remove-item" title="Remove from pack">×</button>
       </li>`;
     });
     
@@ -1747,6 +1810,36 @@ function updatePackTree() {
         handlePackItemClick(packItem);
       }
     });
+
+    // Add remove button handler
+    const removeBtn = item.querySelector('.remove-item');
+    if (removeBtn) {
+      removeBtn.addEventListener('click', (event) => {
+        event.stopPropagation(); // Prevent triggering item selection
+        const path = item.dataset.path;
+        const folderPath = item.dataset.folder;
+        
+        if (folderPath) {
+          // Remove from folder
+          const folderItems = currentPack.folders[folderPath];
+          const itemIndex = folderItems.findIndex(i => i.path === path);
+          if (itemIndex > -1) {
+            folderItems.splice(itemIndex, 1);
+            updateStatusBar(`Removed ${path.split('/').pop()} from ${folderPath}`);
+          }
+        } else {
+          // Remove from root
+          const itemIndex = currentPack.items.findIndex(i => i.path === path);
+          if (itemIndex > -1) {
+            currentPack.items.splice(itemIndex, 1);
+            updateStatusBar(`Removed ${path.split('/').pop()} from pack`);
+          }
+        }
+        
+        updatePackTree();
+        updatePackStats();
+      });
+    }
     
     // Add context menu handler
     item.addEventListener('contextmenu', (event) => {
@@ -1936,8 +2029,104 @@ style.textContent = `
     margin: 0;
     cursor: pointer;
   }
+
+  /* Volume slider custom styles */
+  #volumeSlider {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    border-radius: 2px;
+    background: #1a1a1a;
+    outline: none;
+    opacity: 0.9;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  /* Slider track - webkit browsers */
+  #volumeSlider::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(to right, #00ff00 var(--value, 50%), #1a1a1a var(--value, 50%));
+    border-radius: 2px;
+    border: none;
+  }
+
+  /* Slider thumb - webkit browsers */
+  #volumeSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #00ff00;
+    box-shadow: 0 0 4px rgba(0, 255, 0, 0.5);
+    margin-top: -6px;
+    border: 2px solid #000;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  /* Slider track - Firefox */
+  #volumeSlider::-moz-range-track {
+    width: 100%;
+    height: 4px;
+    background: #1a1a1a;
+    border-radius: 2px;
+    border: none;
+  }
+
+  /* Slider thumb - Firefox */
+  #volumeSlider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #00ff00;
+    box-shadow: 0 0 4px rgba(0, 255, 0, 0.5);
+    border: 2px solid #000;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  /* Hover states */
+  #volumeSlider:hover {
+    opacity: 1;
+  }
+
+  #volumeSlider:hover::-webkit-slider-thumb {
+    box-shadow: 0 0 8px rgba(0, 255, 0, 0.7);
+    transform: scale(1.1);
+  }
+
+  #volumeSlider:hover::-moz-range-thumb {
+    box-shadow: 0 0 8px rgba(0, 255, 0, 0.7);
+    transform: scale(1.1);
+  }
+
+  /* Active states */
+  #volumeSlider:active::-webkit-slider-thumb {
+    box-shadow: 0 0 12px rgba(0, 255, 0, 0.9);
+    transform: scale(1.2);
+  }
+
+  #volumeSlider:active::-moz-range-thumb {
+    box-shadow: 0 0 12px rgba(0, 255, 0, 0.9);
+    transform: scale(1.2);
+  }
 `;
 document.head.appendChild(style);
+
+// Add this code after the style definition to update the volume slider's gradient
+function updateVolumeSliderGradient() {
+  const value = volumeSlider.value;
+  volumeSlider.style.setProperty('--value', `${value}%`);
+}
+
+// Add event listener for volume changes to update the gradient
+volumeSlider.addEventListener('input', updateVolumeSliderGradient);
+
+// Initial update of the gradient
+updateVolumeSliderGradient();
 
 // Add function to start seekbar updates
 function startSeekbarUpdates() {

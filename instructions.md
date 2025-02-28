@@ -399,3 +399,147 @@ root/
 instructions.md and changelog.md should be updated with each significant change or milestone. Keep sections organized and maintain a clear record of both achievements and challenges.
 
 i want to create an amazing desktop app for music producers where they can easily browse zips, folders etc, listen to loops, browse individual samples, rename, organize, and create subpacks out of the samples.  they can then package these packs, maybe even create images/cover images or 3d mockups, and create these finalized packs.  i'd also like to entertain the possibility of eventually being able to combine them onto a sort of sequencer arrangement display where they can take blocks of loops, stretch them to fit with one another, and easily create a new song from loops by combining from multiple packs various drum loops, bass loops, etc etc etc to create brand new songs and remixes.  
+
+# Sample Browser Instructions
+
+## Tech Stack Overview
+
+### Core Technologies
+- **Electron (v28.0.0+)**
+  - Cross-platform desktop application framework
+  - IPC for secure main/renderer process communication
+  - Native file system access
+
+- **Audio Processing**
+  - Web Audio API for real-time audio manipulation
+  - Custom waveform visualization engine
+  - Sample-accurate playback system
+  - Real-time audio analysis
+
+- **Frontend**
+  - Custom Web Audio implementation
+  - Canvas API for waveform rendering
+  - CSS Grid/Flexbox for layouts
+  - Modern/Retro theme support
+  - Responsive design system
+
+- **Backend**
+  - Node.js (v18.0.0+)
+  - Native file system operations
+  - ZIP archive handling
+  - State management
+  - Error recovery systems
+
+### Development Tools
+- TypeScript for type safety
+- Webpack for bundling
+- ESLint for code quality
+- Jest for testing
+- Electron Builder for distribution
+
+## Features
+
+### Audio Playback
+1. **Basic Controls**
+   - Play/Pause
+   - Restart
+   - Loop toggle
+   - Volume control
+   - Seek functionality
+
+2. **Waveform Display**
+   - High-performance canvas rendering
+   - Zoom and scroll capabilities
+   - Playhead tracking
+   - Selection capabilities
+
+### File Management
+1. **Navigation**
+   - Folder browsing
+   - ZIP archive support
+   - Subfolder organization
+   - Drag-and-drop support
+
+2. **Pack Creation**
+   - Virtual folder structure
+   - Multi-source support
+   - Export capabilities
+   - State persistence
+
+## Current Development Status
+
+### Completed Features
+1. **Pack Creation and Export**
+   - Virtual folder structure
+   - Multi-source support
+   - Export functionality
+   - State management
+
+2. **Audio Processing**
+   - Custom Web Audio implementation
+   - Waveform visualization
+   - Basic playback controls
+   - Volume management
+
+### Planned Features
+
+1. **Click Track System**
+   - Customizable beat divisions (4, 6, 8, 12, 16, 24, 32)
+   - Auto-disable for samples under 2 seconds
+   - Sample-accurate synchronization
+   - Independent volume control
+   - Visual beat markers on waveform
+   - Intelligent tempo detection
+   - Beat division quick selection
+
+   Implementation Plan:
+   ```javascript
+   class ClickTrackEngine {
+     constructor(audioContext, options = {}) {
+       this.context = audioContext;
+       this.divisions = options.divisions || 4;
+       this.enabled = true;
+       this.volume = options.volume || 0.7;
+       this.setupOscillators();
+     }
+
+     // ... implementation details moved to planned features ...
+   }
+   ```
+
+2. **Performance Optimization**
+   - Large file handling
+   - Memory management
+   - Waveform rendering
+   - Audio engine improvements
+
+3. **UI Enhancements**
+   - Beat visualization
+   - Quick division presets
+   - Visual metronome
+   - Keyboard shortcuts
+
+### Technical Architecture
+
+#### Audio Processing Pipeline
+```
+AudioSource -> GainNode -> Analyser -> Destination
+```
+
+#### State Management
+```javascript
+const audioState = {
+  isPlaying: false,
+  currentTime: 0,
+  duration: 0
+};
+```
+
+## Next Steps
+1. Implement click track functionality
+2. Improve performance for large files
+3. Add visual beat markers
+4. Enhance waveform visualization
+5. Add keyboard shortcuts
+
+// ... rest of existing content ...
