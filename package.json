@@ -1,0 +1,58 @@
+{
+  "name": "sample-browser-app",
+  "version": "1.0.0",
+  "description": "Professional audio sample browser and pack creator",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "dev": "concurrently \"npm start\" \"npm:electron\"",
+    "electron": "wait-on tcp:3000 && electron .",
+    "electron-build": "electron-builder",
+    "build-all": "npm run build && npm run electron-build"
+  },
+  "author": "Alex Chen",
+  "private": true,
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "electron": "^28.0.0",
+    "electron-builder": "^23.6.0",
+    "wait-on": "^7.2.0"
+  },
+  "dependencies": {
+    "adm-zip": "^0.5.10",
+    "archiver": "^6.0.1",
+    "jszip": "^3.10.1",
+    "wavesurfer.js": "^7.5.2"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "build": {
+    "appId": "com.alexchen.samplebrowser",
+    "productName": "Sample Browser",
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    },
+    "win": {
+      "target": "nsis"
+    }
+  },
+  "keywords": [],
+  "license": "MIT"
+}
